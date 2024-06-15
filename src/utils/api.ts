@@ -22,7 +22,13 @@
 	rout.POST("/chat/:hid/feedback", handler.Feedback)
  */
 
-import type { Character, CharacterSearchResult, ChatHistory, ChatResponse, PagedResult } from '@/types/response'
+import type {
+  Character,
+  CharacterSearchResult,
+  ChatHistory,
+  ChatResponse,
+  PagedResult
+} from '@/types/response'
 import CONFIG from '@/config'
 
 export async function getCharacter(token: string, cid: string): Promise<Character> {
@@ -30,40 +36,53 @@ export async function getCharacter(token: string, cid: string): Promise<Characte
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()
 }
 
-export async function searchCharacter(token: string, query: string, page: number): Promise<PagedResult<CharacterSearchResult>> {
+export async function searchCharacter(
+  token: string,
+  query: string,
+  page: number
+): Promise<PagedResult<CharacterSearchResult>> {
   const res = await fetch(CONFIG.API.ENDPOINT + `api/v1/character?q=${query}&page=${page}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()
 }
 
-export async function searchCharacterByTags(token: string, tags: string[], page: number): Promise<PagedResult<CharacterSearchResult>> {
-  const res = await fetch(CONFIG.API.ENDPOINT + `api/v1/character/tag?tags=${tags.join(',tags=')}&page=${page}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+export async function searchCharacterByTags(
+  token: string,
+  tags: string[],
+  page: number
+): Promise<PagedResult<CharacterSearchResult>> {
+  const res = await fetch(
+    CONFIG.API.ENDPOINT + `api/v1/character/tag?tags=${tags.join(',tags=')}&page=${page}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
     }
-  })
+  )
   return await res.json()
 }
 
-export async function getTrendingCharacters(token: string): Promise<PagedResult<CharacterSearchResult>> {
+export async function getTrendingCharacters(
+  token: string
+): Promise<PagedResult<CharacterSearchResult>> {
   const res = await fetch(CONFIG.API.ENDPOINT + `api/v1/character/trend`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()
@@ -74,30 +93,37 @@ export async function getRandomCharacter(token: string): Promise<CharacterSearch
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()
 }
 
-export async function createCharacter(token: string, character: Record<string, any>): Promise<string> {
+export async function createCharacter(
+  token: string,
+  character: Record<string, any>
+): Promise<string> {
   const res = await fetch(CONFIG.API.ENDPOINT + `api/v1/character`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(character)
   })
-  return (await res.json())["cid"]
+  return (await res.json())['cid']
 }
 
-export async function updateCharacter(token: string, cid: string, character: Record<string, any>): Promise<Character> {
+export async function updateCharacter(
+  token: string,
+  cid: string,
+  character: Record<string, any>
+): Promise<Character> {
   const res = await fetch(CONFIG.API.ENDPOINT + `api/v1/character/${cid}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(character)
   })
@@ -109,7 +135,7 @@ export async function deleteCharacter(token: string, cid: string): Promise<void>
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
 }
@@ -119,7 +145,7 @@ export async function newChat(token: string, cid: string): Promise<ChatResponse>
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()
@@ -130,9 +156,9 @@ export async function chat(token: string, hid: string, content: string): Promise
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify({content})
+    body: JSON.stringify({ content })
   })
   return await res.json()
 }
@@ -142,7 +168,7 @@ export async function getChat(token: string, hid: string): Promise<ChatResponse>
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()
@@ -153,7 +179,7 @@ export async function getChatHistory(token: string): Promise<ChatHistory[]> {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()
@@ -164,7 +190,7 @@ export async function regenerateChat(token: string, hid: string): Promise<ChatRe
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()
@@ -175,9 +201,9 @@ export async function feedback(token: string, hid: string, feedback: boolean): P
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify({feedback})
+    body: JSON.stringify({ feedback })
   })
 }
 
@@ -186,7 +212,7 @@ export async function meUser(token: string): Promise<any> {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()
@@ -197,18 +223,21 @@ export async function getUser(token: string, uid: string): Promise<any> {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()
 }
 
-export async function getUserCharacters(token: string, uid: string): Promise<PagedResult<CharacterSearchResult>> {
+export async function getUserCharacters(
+  token: string,
+  uid: string
+): Promise<PagedResult<CharacterSearchResult>> {
   const res = await fetch(CONFIG.API.ENDPOINT + `api/v1/user/${uid}/characters`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
   return await res.json()

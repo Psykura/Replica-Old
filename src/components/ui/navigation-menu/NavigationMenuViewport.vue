@@ -3,7 +3,7 @@ import { type HTMLAttributes, computed } from 'vue'
 import {
   NavigationMenuViewport,
   type NavigationMenuViewportProps,
-  useForwardProps,
+  useForwardProps
 } from 'radix-vue'
 import { cn } from '@/lib/utils'
 
@@ -25,7 +25,7 @@ const forwardedProps = useForwardProps(delegatedProps)
       :class="
         cn(
           'origin-top-center relative mt-1.5 h-[--radix-navigation-menu-viewport-height] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[--radix-navigation-menu-viewport-width]',
-          props.class,
+          props.class
         )
       "
     />

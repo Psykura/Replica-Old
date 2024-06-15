@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { useHandleSignInCallback } from '@logto/vue';
-  useHandleSignInCallback();
+import { useHandleSignInCallback } from '@logto/vue'
+useHandleSignInCallback()
 </script>
 
 <template>

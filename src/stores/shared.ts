@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 
 const DEFAULT = {
-  title: "Replica",
+  title: 'Replica'
 }
 
 export const useSharedState = defineStore('shared', {
   state: () => ({
-    title: DEFAULT.title,
+    title: DEFAULT.title
   }),
   getters: {
     getTitle(state) {

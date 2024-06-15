@@ -3,7 +3,7 @@ import {
   NavigationMenuLink,
   type NavigationMenuLinkEmits,
   type NavigationMenuLinkProps,
-  useForwardPropsEmits,
+  useForwardPropsEmits
 } from 'radix-vue'
 
 const props = defineProps<NavigationMenuLinkProps>()

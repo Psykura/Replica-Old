@@ -2,14 +2,15 @@
 import { type HTMLAttributes, computed } from 'vue'
 import { PaginationFirst, type PaginationFirstProps } from 'radix-vue'
 import { ChevronsLeft } from 'lucide-vue-next'
-import {
-  Button,
-} from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-const props = withDefaults(defineProps<PaginationFirstProps & { class?: HTMLAttributes['class'] }>(), {
-  asChild: true,
-})
+const props = withDefaults(
+  defineProps<PaginationFirstProps & { class?: HTMLAttributes['class'] }>(),
+  {
+    asChild: true
+  }
+)
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props

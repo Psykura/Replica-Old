@@ -2,7 +2,13 @@
 import { Separator } from '@/components/ui/separator'
 import { Home, User2, Search } from 'lucide-vue-next'
 import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog'
 import Login from '@/components/login.vue'
 import { Button } from '@/components/ui/button'
 import { useSharedState } from '@/stores/shared'
@@ -16,12 +22,12 @@ import { useChatStore } from '@/stores/chat'
 const sharedState = useSharedState()
 const chatStore = useChatStore()
 
-const { getAccessToken } = useLogto();
+const { getAccessToken } = useLogto()
 
 const getHistoryChats = async () => {
-  const token = await getAccessToken(CONFIG.API.ENDPOINT);
-  const hist = await getChatHistory(token!);
-  chatStore.setHistory(hist);
+  const token = await getAccessToken(CONFIG.API.ENDPOINT)
+  const hist = await getChatHistory(token!)
+  chatStore.setHistory(hist)
 }
 
 onMounted(async () => {
@@ -37,18 +43,33 @@ onMounted(async () => {
         <span class="text-xl font-bold"> {{ sharedState.getTitle }} </span>
       </div>
       <Separator />
-      <RouterLink class="flex items-center p-2 pl-3 transition-all rounded hover:bg-zinc-100 dark:hover:bg-zinc-800" :to="{'name': 'Landing'}"><Home class="w-4 h-4 mr-2" />主页</RouterLink>
-      <RouterLink class="flex items-center p-2 pl-3 transition-all rounded hover:bg-zinc-100 dark:hover:bg-zinc-800" :to="{'name': 'Search'}"><Search class="w-4 h-4 mr-2" />搜索</RouterLink>
+      <RouterLink
+        class="flex items-center p-2 pl-3 transition-all rounded hover:bg-zinc-100 dark:hover:bg-zinc-800"
+        :to="{ name: 'Landing' }"
+        ><Home class="w-4 h-4 mr-2" />主页</RouterLink
+      >
+      <RouterLink
+        class="flex items-center p-2 pl-3 transition-all rounded hover:bg-zinc-100 dark:hover:bg-zinc-800"
+        :to="{ name: 'Search' }"
+        ><Search class="w-4 h-4 mr-2" />搜索</RouterLink
+      >
       <Separator />
     </nav>
     <div class="grow overflow-y-auto space-y-2 mb-2 mt-2">
-      <RouterLink class="flex items-center p-2 transition-all rounded hover:bg-zinc-100 dark:hover:bg-zinc-800" :to="'/chat/' + data.hid" v-for="(data, i) in chatStore.getHistory" :key="i">
+      <RouterLink
+        class="flex items-center p-2 transition-all rounded hover:bg-zinc-100 dark:hover:bg-zinc-800"
+        :to="'/chat/' + data.hid"
+        v-for="(data, i) in chatStore.getHistory"
+        :key="i"
+      >
         <Avatar class="w-8 h-8 mr-1">
           <AvatarImage src="files://" />
           <AvatarFallback>{{ data.name[0] }}</AvatarFallback>
         </Avatar>
         <span class="text-sm whitespace-nowrap grow">{{ data.name }}</span>
-        <p class="text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis">: {{ data.logs[0].content }}</p>
+        <p class="text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis">
+          : {{ data.logs[0].content }}
+        </p>
       </RouterLink>
     </div>
     <nav class="space-y-2 mb-3">
@@ -75,7 +96,7 @@ onMounted(async () => {
         </Dialog>
       </div>
       <footer class="text-center text-sm">
-        &copy;Replica by <a href="https://psykura.one" target="_blank" >Psykura Lab</a>
+        &copy;Replica by <a href="https://psykura.one" target="_blank">Psykura Lab</a>
       </footer>
     </nav>
   </aside>

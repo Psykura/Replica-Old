@@ -10,18 +10,18 @@ import { Loader2, Plus } from 'lucide-vue-next'
 import CreateCharacterPop from '@/components/create_character_pop.vue'
 import { Button } from '@/components/ui/button'
 
-const { isAuthenticated, getAccessToken } = useLogto();
+const { isAuthenticated, getAccessToken } = useLogto()
 
-const trendingCharacters = ref<CharacterSearchResult[]>();
-const recommendedCharacters = ref<CharacterSearchResult[]>();
+const trendingCharacters = ref<CharacterSearchResult[]>()
+const recommendedCharacters = ref<CharacterSearchResult[]>()
 
 if (isAuthenticated.value) {
-  (async () => {
-    const token = await getAccessToken(CONFIG.API.ENDPOINT);
+  ;(async () => {
+    const token = await getAccessToken(CONFIG.API.ENDPOINT)
     const { result, total_pages } = await getTrendingCharacters(token!)
     trendingCharacters.value = result
     recommendedCharacters.value = trendingCharacters.value.slice(0, 4)
-  })();
+  })()
 }
 </script>
 
@@ -31,12 +31,14 @@ if (isAuthenticated.value) {
       <div class="landing-image">
         <div class="flex items-center content-center justify-between p-16 h-full">
           <div class="flex flex-col">
-            <h1 class="text-4xl font-bold text-white">Replica 制酱工厂 </h1>
+            <h1 class="text-4xl font-bold text-white">Replica 制酱工厂</h1>
             <p class="text-white">你所触碰的是虚假，亦或是真实？</p>
           </div>
           <div class="flex items-center content-center">
             <CreateCharacterPop>
-              <Button variant="secondary" size="icon" class="rounded-full"><Plus class="w-4 h-4" /> </Button>
+              <Button variant="secondary" size="icon" class="rounded-full"
+                ><Plus class="w-4 h-4" />
+              </Button>
             </CreateCharacterPop>
           </div>
         </div>
@@ -50,7 +52,12 @@ if (isAuthenticated.value) {
       <Separator class="mt-1 mb-4" />
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Loader2 v-if="!recommendedCharacters" class="animate-spin" />
-        <CharacterCard class="shadow-none transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-300" v-for="i in recommendedCharacters" :key="i.id" :data="i" />
+        <CharacterCard
+          class="shadow-none transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-300"
+          v-for="i in recommendedCharacters"
+          :key="i.id"
+          :data="i"
+        />
       </div>
     </div>
     <div class="p-4">
@@ -61,7 +68,12 @@ if (isAuthenticated.value) {
       <Separator class="mt-1 mb-4" />
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Loader2 v-if="!trendingCharacters" class="animate-spin" />
-        <CharacterCard class="shadow-none transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-300" v-for="i in trendingCharacters" :key="i.id" :data="i" />
+        <CharacterCard
+          class="shadow-none transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-300"
+          v-for="i in trendingCharacters"
+          :key="i.id"
+          :data="i"
+        />
       </div>
     </div>
   </div>
@@ -69,7 +81,8 @@ if (isAuthenticated.value) {
 
 <style scoped lang="scss">
 .landing-image {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, .4)), url(@/assets/img/login-bg.webp);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url(@/assets/img/login-bg.webp);
   background-size: cover;
   background-position: top;
   height: 18rem;

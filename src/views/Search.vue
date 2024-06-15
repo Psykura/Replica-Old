@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Loader2, Search } from 'lucide-vue-next'
 import { Input } from '@/components/ui/input'
-import { useDebounceFn } from "@vueuse/core"
+import { useDebounceFn } from '@vueuse/core'
 import { onMounted, ref, watch } from 'vue'
 import CharacterCard from '@/components/character_card.vue'
 import type { CharacterSearchResult } from '@/types/response'
@@ -17,10 +17,10 @@ import {
   PaginationList,
   PaginationListItem,
   PaginationNext,
-  PaginationPrev,
+  PaginationPrev
 } from '@/components/ui/pagination'
 
-const { getAccessToken } = useLogto();
+const { getAccessToken } = useLogto()
 
 const searchText = ref<string>('')
 const loading = ref(false)
@@ -43,7 +43,7 @@ const search = async () => {
 const init = async () => {
   loading.value = true
   const token = await getAccessToken(CONFIG.API.ENDPOINT)
-  const data = await searchCharacter(token!, "", 0)
+  const data = await searchCharacter(token!, '', 0)
   characters.value = data.result
   totalPages.value = data.total_pages
   loading.value = false
@@ -62,7 +62,13 @@ onMounted(async () => {
 <template>
   <div class="p-4 flex flex-col gap-2">
     <div class="relative w-full items-center mb-2">
-      <Input id="search" type="text" placeholder="输入点什么..." class="pl-10" v-model="searchText" />
+      <Input
+        id="search"
+        type="text"
+        placeholder="输入点什么..."
+        class="pl-10"
+        v-model="searchText"
+      />
       <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
         <Search class="size-6 text-muted-foreground" />
       </span>
@@ -70,11 +76,24 @@ onMounted(async () => {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <Loader2 v-if="loading" class="animate-spin" />
       <template v-else>
-        <CharacterCard class="shadow-none transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-300" v-for="i in characters" :key="i.id" :data="i" />
+        <CharacterCard
+          class="shadow-none transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-300"
+          v-for="i in characters"
+          :key="i.id"
+          :data="i"
+        />
       </template>
     </div>
 
-    <Pagination v-slot="{ page }" :total="totalPages" :sibling-count="1" show-edges :default-page="1" v-model="nowPage" v-if="characters!.length > 0">
+    <Pagination
+      v-slot="{ page }"
+      :total="totalPages"
+      :sibling-count="1"
+      show-edges
+      :default-page="1"
+      v-model="nowPage"
+      v-if="characters!.length > 0"
+    >
       <PaginationList v-slot="{ items }" class="flex items-center gap-1">
         <PaginationFirst />
         <PaginationPrev />
@@ -92,10 +111,7 @@ onMounted(async () => {
         <PaginationLast />
       </PaginationList>
     </Pagination>
-
   </div>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import CreateCharacter from '@/components/create_character.vue'
 import { BookUser } from 'lucide-vue-next'
@@ -32,6 +38,4 @@ import { ScrollArea } from '@/components/ui/scroll-area'
   </Popover>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

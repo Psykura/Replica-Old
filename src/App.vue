@@ -16,11 +16,13 @@ if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.match
 </script>
 
 <template>
-  <RouterView v-if="route.name === 'RequireLogin' || route.name === 'AuthCallback' || !route.name" />
+  <RouterView
+    v-if="route.name === 'RequireLogin' || route.name === 'AuthCallback' || !route.name"
+  />
   <div class="flex flex-1 h-full" v-else>
     <NavSide />
     <ScrollArea class="flex-1 h-full">
-      <RouterView/>
+      <RouterView />
     </ScrollArea>
   </div>
 </template>

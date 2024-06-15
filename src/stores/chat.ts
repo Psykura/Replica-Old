@@ -24,7 +24,7 @@ export const useChatStore = defineStore('chat', {
     isCharacterExist: (state) => (cid: string) => {
       return state.characters[cid] !== undefined
     },
-    getLogs: (state) => (hid: string)  => {
+    getLogs: (state) => (hid: string) => {
       return state.chats[hid].logs
     },
     getFeedback: (state) => (hid: string) => {
@@ -41,14 +41,14 @@ export const useChatStore = defineStore('chat', {
     }
   },
   actions: {
-    upsertCharacter(cid: string, character: Character){
+    upsertCharacter(cid: string, character: Character) {
       this.characters[cid] = character
     },
-    setHistory(history: ChatHistory[]){
+    setHistory(history: ChatHistory[]) {
       this.history = history
     },
-    appendHistory(history: ChatHistory){
-      if (this.history.length >= 50){
+    appendHistory(history: ChatHistory) {
+      if (this.history.length >= 50) {
         this.history.pop()
       }
       if (this.history.length > 0 && this.history[0].hid == history.hid) {
@@ -56,11 +56,11 @@ export const useChatStore = defineStore('chat', {
       }
       this.history.unshift(history)
     },
-    setHistoryMsg(hid: string, log: ChatLog){
+    setHistoryMsg(hid: string, log: ChatLog) {
       const idx = this.history.findIndex((h) => h.hid === hid)
       this.history[idx].logs = [log]
     },
-    addChat(hid: string, cid: string, logs: ChatLog[], feedback: boolean = false){
+    addChat(hid: string, cid: string, logs: ChatLog[], feedback: boolean = false) {
       this.chats[hid] = {
         hid,
         cid,
@@ -68,23 +68,23 @@ export const useChatStore = defineStore('chat', {
         feedback: feedback
       }
     },
-    setLogs(hid: string, logs: ChatLog[]){
+    setLogs(hid: string, logs: ChatLog[]) {
       this.chats[hid].logs = logs
     },
-    addLog(hid: string, log: ChatLog){
+    addLog(hid: string, log: ChatLog) {
       this.chats[hid].logs.push(log)
     },
-    popLog(hid: string){
+    popLog(hid: string) {
       this.chats[hid].logs.pop()
     },
-    refreshLogs(hid: string, log: ChatLog){
+    refreshLogs(hid: string, log: ChatLog) {
       this.chats[hid].logs.pop()
       this.chats[hid].logs.push(log)
     },
-    setFeedback(hid: string){
+    setFeedback(hid: string) {
       this.chats[hid].feedback = true
     },
-    resetFeedback(hid: string){
+    resetFeedback(hid: string) {
       this.chats[hid].feedback = false
     }
   }

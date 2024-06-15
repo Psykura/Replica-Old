@@ -15,34 +15,34 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 const { toast } = useToast()
 const router = useRouter()
 const route = useRoute()
-const { getAccessToken, getIdTokenClaims } = useLogto();
+const { getAccessToken, getIdTokenClaims } = useLogto()
 
 const chatStore = useChatStore()
 
-const hid = ref("")
+const hid = ref('')
 const ready = ref(false)
 const userName = ref<string>()
 
-const inputText = ref("")
+const inputText = ref('')
 const disableInput = ref(false)
-const inputEle = ref<any>();
-const scroll = ref<any>();
+const inputEle = ref<any>()
+const scroll = ref<any>()
 
 const load = async () => {
-  hid.value = ""
+  hid.value = ''
   ready.value = false
-  userName.value = ""
-  inputText.value = ""
+  userName.value = ''
+  inputText.value = ''
   disableInput.value = false
   inputEle.value = null
   scroll.value = null
 
   const claims = await getIdTokenClaims()
   userName.value = claims!.username!!
-  if (route.name === "NewChat") {
-    const cid = route.params["cid"] as string || ""
+  if (route.name === 'NewChat') {
+    const cid = (route.params['cid'] as string) || ''
     if (!cid) {
-      await router.push({ name: "Landing" })
+      await router.push({ name: 'Landing' })
     }
     const token = await getAccessToken(CONFIG.API.ENDPOINT)
     const newChatInfo = await newChat(token!, cid)
@@ -55,12 +55,12 @@ const load = async () => {
     chatStore.appendHistory({
       hid,
       cid: newChatInfo.cid,
-      name: chatStore.getCharacterFromChat(hid)["name"],
-      logs: newChatInfo.logs,
+      name: chatStore.getCharacterFromChat(hid)['name'],
+      logs: newChatInfo.logs
     })
-    await router.push({ name: "Chat", params: {hid} })
+    await router.push({ name: 'Chat', params: { hid } })
   }
-  hid.value = route.params["hid"] as string || ""
+  hid.value = (route.params['hid'] as string) || ''
   if (!chatStore.isChatExist(hid.value)) {
     const token = await getAccessToken(CONFIG.API.ENDPOINT)
     const theChat = await getChat(token!, hid.value)
@@ -101,7 +101,7 @@ const submit = async () => {
   disableInput.value = true
   chatStore.addLog(hid.value, {
     from: 0,
-    content: inputText.value,
+    content: inputText.value
   })
   await nextTick(() => {
     keepBottom()
@@ -112,15 +112,15 @@ const submit = async () => {
     toast({
       title: '嗯，有一些问题啊...',
       description: '不知道为什么? 请稍后再试一次',
-      variant: 'destructive',
-    });
+      variant: 'destructive'
+    })
     chatStore.popLog(hid.value)
     disableInput.value = false
     return
   }
   chatStore.addLog(hid.value, result.logs[0])
 
-  inputText.value = ""
+  inputText.value = ''
   disableInput.value = false
   chatStore.resetFeedback(hid.value)
   chatStore.setHistoryMsg(hid.value, result.logs[0])
@@ -140,8 +140,8 @@ const regenerate = async () => {
     toast({
       title: '嗯，有一些问题啊...',
       description: '不知道为什么? 请稍后再试一次',
-      variant: 'destructive',
-    });
+      variant: 'destructive'
+    })
     disableInput.value = false
     return
   }
@@ -161,7 +161,7 @@ const feedBack = async (feed: boolean) => {
 }
 
 const submitEnter = async (e: KeyboardEvent) => {
-  if (!e.ctrlKey && e.key === "Enter") {
+  if (!e.ctrlKey && e.key === 'Enter') {
     await submit()
   }
 }
@@ -186,17 +186,26 @@ const submitEnter = async (e: KeyboardEvent) => {
         <div class="flex gap-3" v-else>
           <Avatar>
             <AvatarImage src="files://" />
-            <AvatarFallback>{{ chatStore.getCharacterFromChat(hid)["name"][0] }}</AvatarFallback>
+            <AvatarFallback>{{ chatStore.getCharacterFromChat(hid)['name'][0] }}</AvatarFallback>
           </Avatar>
           <div class="flex flex-col items center gap-2">
-            <span class="font-bold font-400">{{ chatStore.getCharacterFromChat(hid)["name"] }}</span>
+            <span class="font-bold font-400">{{
+              chatStore.getCharacterFromChat(hid)['name']
+            }}</span>
             <div class="rounded-lg px-3 py-2 text-base bg-muted w-fit">{{ log.content }}</div>
-            <div class="flex gap-1 justify-end items-center" v-if="i == chatStore.getLogs(hid).length - 1 && i > 1">
+            <div
+              class="flex gap-1 justify-end items-center"
+              v-if="i == chatStore.getLogs(hid).length - 1 && i > 1"
+            >
               <template v-if="!chatStore.getFeedback(hid)">
-                <ThumbsUp class="w-4 h-4 thumbs-up" @click="feedBack(true)"/>
-                <ThumbsDown class="w-4 h-4 thumbs-down" @click="feedBack(false)"/>
+                <ThumbsUp class="w-4 h-4 thumbs-up" @click="feedBack(true)" />
+                <ThumbsDown class="w-4 h-4 thumbs-down" @click="feedBack(false)" />
               </template>
-              <RotateCcw class="ml-1 w-4 h-4" @click="regenerate" :class="{'animate-spin': disableInput}" />
+              <RotateCcw
+                class="ml-1 w-4 h-4"
+                @click="regenerate"
+                :class="{ 'animate-spin': disableInput }"
+              />
             </div>
           </div>
         </div>
@@ -205,10 +214,10 @@ const submitEnter = async (e: KeyboardEvent) => {
       <div class="flex gap-3" v-if="disableInput">
         <Avatar>
           <AvatarImage src="files://" />
-          <AvatarFallback>{{ chatStore.getCharacterFromChat(hid)["name"][0] }}</AvatarFallback>
+          <AvatarFallback>{{ chatStore.getCharacterFromChat(hid)['name'][0] }}</AvatarFallback>
         </Avatar>
         <div class="flex flex-col items center gap-2">
-          <span class="font-bold font-400">{{ chatStore.getCharacterFromChat(hid)["name"] }}</span>
+          <span class="font-bold font-400">{{ chatStore.getCharacterFromChat(hid)['name'] }}</span>
           <div class="rounded-lg px-3 py-2 text-base bg-muted w-fit">
             <Loader2 v-if="disableInput" class="w-5 h-5 animate-spin" />
           </div>
@@ -216,7 +225,14 @@ const submitEnter = async (e: KeyboardEvent) => {
       </div>
     </div>
     <div class="flex w-full items-center gap-1.5 p-4 pt-1">
-      <Input type="text" placeholder="说点什么..." :disabled="disableInput" v-model="inputText" @keydown="submitEnter" ref="inputEle"/>
+      <Input
+        type="text"
+        placeholder="说点什么..."
+        :disabled="disableInput"
+        v-model="inputText"
+        @keydown="submitEnter"
+        ref="inputEle"
+      />
       <Button @click="submit" :disabled="disableInput || inputText.length < 1">
         <Loader2 v-if="disableInput" class="w-4 h-4 animate-spin mr-2" />
         <SendHorizonal v-else class="w-4 h-4 mr-2" />

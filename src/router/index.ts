@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LogtoClient from '@logto/browser';
+import LogtoClient from '@logto/browser'
 import CONFIG from '@/config'
 
 const logtoCli = new LogtoClient({
@@ -42,21 +42,21 @@ const router = createRouter({
       component: () => import('@/views/RequireLogin.vue')
     },
     {
-      path: "/:catchAll(.*)",
-      redirect: "/"
+      path: '/:catchAll(.*)',
+      redirect: '/'
     }
   ],
-  linkActiveClass: 'bg-gradient-to-r from-blue-600 to-cyan-400 text-white',
+  linkActiveClass: 'bg-gradient-to-r from-blue-600 to-cyan-400 text-white'
 })
 
 router.beforeEach(async (to, from) => {
   const authed = await logtoCli.isAuthenticated()
-  if (!authed && to.name !== "RequireLogin" && to.name !== "AuthCallback") {
+  if (!authed && to.name !== 'RequireLogin' && to.name !== 'AuthCallback') {
     const query: Record<string, string> = {}
-    if (to.name !== "Landing"){
-      query["return"] = encodeURIComponent(to.fullPath)
+    if (to.name !== 'Landing') {
+      query['return'] = encodeURIComponent(to.fullPath)
     }
-    return {name: "RequireLogin", query}
+    return { name: 'RequireLogin', query }
   }
 })
 
