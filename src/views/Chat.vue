@@ -224,7 +224,10 @@ const submitEnter = async (e: KeyboardEvent) => {
         </div>
       </div>
     </div>
-    <div class="flex w-full items-center gap-1.5 p-4 pt-1">
+    <div class="flex w-full items-center gap-1.5 p-4 pt-1 relative">
+      <p class="warning-inaccuracy text-sm text-gray-400 select-none">
+        请注意：角色的对话均为捏造，请勿信以为真
+      </p>
       <Input
         type="text"
         placeholder="说点什么..."
@@ -259,5 +262,15 @@ const submitEnter = async (e: KeyboardEvent) => {
   &:focus {
     fill: red;
   }
+}
+
+.warning-inaccuracy {
+  position: absolute;
+  top: -22px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: auto;
+
 }
 </style>

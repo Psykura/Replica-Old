@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { Loader2, Search } from 'lucide-vue-next'
-import { Input } from '@/components/ui/input'
-import { useDebounceFn } from '@vueuse/core'
-import { onMounted, ref, watch } from 'vue'
-import CharacterCard from '@/components/character_card.vue'
-import type { CharacterSearchResult } from '@/types/response'
-import { searchCharacter } from '@/utils/api'
-import { useLogto } from '@logto/vue'
-import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useRoute } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import type { CharacterSearchResult, UserResponse } from '@/types/response'
+import { getUser, getUserCharacters, searchCharacter } from '@/utils/api'
 import CONFIG from '@/config'
+import { useLogto } from '@logto/vue'
+import CharacterCard from '@/components/character_card.vue'
+import { Loader2 } from 'lucide-vue-next'
 import {
   Pagination,
   PaginationEllipsis,
@@ -19,60 +18,49 @@ import {
   PaginationNext,
   PaginationPrev
 } from '@/components/ui/pagination'
+import { Button } from '@/components/ui/button'
 
 const { getAccessToken } = useLogto()
+const route = useRoute()
 
-const searchText = ref<string>('')
+const user = ref<UserResponse | null>(null)
 const loading = ref(false)
+const characters = ref<CharacterSearchResult[]>([])
+
 const totalPages = ref(0)
 const nowPage = ref(1)
 
-const search = async () => {
-  if (!searchText.value) {
-    return
-  }
-
+const load = async () => {
   loading.value = true
+  const uid = route.params['uid'] as string
   const token = await getAccessToken(CONFIG.API.ENDPOINT)
-  const data = await searchCharacter(token!, searchText.value, nowPage.value - 1)
+  user.value = await getUser(token!, uid)
+  const data = await getUserCharacters(token!, uid, nowPage.value - 1)
   characters.value = data.result
   totalPages.value = data.total_pages
   loading.value = false
 }
-
-const init = async () => {
-  loading.value = true
-  const token = await getAccessToken(CONFIG.API.ENDPOINT)
-  const data = await searchCharacter(token!, '', 0)
-  characters.value = data.result
-  totalPages.value = data.total_pages
-  loading.value = false
-}
-
-watch(searchText, useDebounceFn(search, 500))
-watch(nowPage, useDebounceFn(search, 50))
-
-const characters = ref<CharacterSearchResult[]>([])
 
 onMounted(async () => {
-  await init()
+  await load()
 })
 </script>
 
 <template>
-  <div class="p-4 flex flex-col gap-2">
-    <div class="relative w-full items-center mb-2">
-      <Input
-        id="search"
-        type="text"
-        placeholder="输入点什么..."
-        class="pl-10"
-        v-model="searchText"
-      />
-      <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
-        <Search class="size-6 text-muted-foreground" />
-      </span>
+  <div class="flex w-full flex-col p-4 gap-4" v-if="user">
+    <div class="flex-row h-64 items-center justify-center content-center">
+      <div class="flex items-center justify-start gap-6 p-14 triangle-bg">
+        <Avatar class="w-32 h-32">
+          <AvatarImage :src="user.picture" />
+          <AvatarFallback>{{ user.name[0] }}</AvatarFallback>
+        </Avatar>
+        <div class="flex flex-col text-white">
+          <h1 class="text-4xl font-bold">{{ user.nickname ?? user.name }}</h1>
+          <span class="text-gray-200 text-sm">@{{ user.id }}</span>
+        </div>
+      </div>
     </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <Loader2 v-if="loading" class="animate-spin" />
       <template v-else>
@@ -111,7 +99,15 @@ onMounted(async () => {
         <PaginationLast />
       </PaginationList>
     </Pagination>
+
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.triangle-bg {
+  position: relative;
+  background-image: linear-gradient(to right, #2563eb, #22d3ee);
+  clip-path: polygon(0% 0%, 0% 100%, 45% 100%, 46% 95%, 54% 95%, 55% 100%, 100% 100%, 100% 0%, 0% 0%, 0% 100%);
+  border-radius: 20px;
+}
+</style>

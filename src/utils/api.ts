@@ -27,7 +27,7 @@ import type {
   CharacterSearchResult,
   ChatHistory,
   ChatResponse,
-  PagedResult
+  PagedResult, UserResponse
 } from '@/types/response'
 import CONFIG from '@/config'
 
@@ -207,7 +207,7 @@ export async function feedback(token: string, hid: string, feedback: boolean): P
   })
 }
 
-export async function meUser(token: string): Promise<any> {
+export async function meUser(token: string): Promise<UserResponse> {
   const res = await fetch(CONFIG.API.ENDPOINT + `api/v1/user/me`, {
     method: 'GET',
     headers: {
@@ -218,7 +218,7 @@ export async function meUser(token: string): Promise<any> {
   return await res.json()
 }
 
-export async function getUser(token: string, uid: string): Promise<any> {
+export async function getUser(token: string, uid: string): Promise<UserResponse> {
   const res = await fetch(CONFIG.API.ENDPOINT + `api/v1/user/${uid}`, {
     method: 'GET',
     headers: {
@@ -231,9 +231,10 @@ export async function getUser(token: string, uid: string): Promise<any> {
 
 export async function getUserCharacters(
   token: string,
-  uid: string
+  uid: string,
+  page: number
 ): Promise<PagedResult<CharacterSearchResult>> {
-  const res = await fetch(CONFIG.API.ENDPOINT + `api/v1/user/${uid}/characters`, {
+  const res = await fetch(CONFIG.API.ENDPOINT + `api/v1/user/${uid}/characters?page=${page}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

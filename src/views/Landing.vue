@@ -15,12 +15,16 @@ const { isAuthenticated, getAccessToken } = useLogto()
 const trendingCharacters = ref<CharacterSearchResult[]>()
 const recommendedCharacters = ref<CharacterSearchResult[]>()
 
+recommendedCharacters.value = [
+  {"id":"6657425187850aef1c103e83","name":"珞璃","greeting":"哇，又见到主人了呢，好开心！主人想要和我聊些什么呢？","description":"珞璃是你的得力助手","creator":"yc2j8acnf0yn","create_time":1716994641,"visibility":3,"tags":["官方"]},
+  {"id":"666911f72b021099250df322","name":"珞璎","greeting":"我一直在这里等着你呢！","description":"珞璎是你的情绪解药","creator":"yc2j8acnf0yn","create_time":1718161911,"visibility":3,"tags":["官方","心理","情感"]},
+]
+
 if (isAuthenticated.value) {
-  ;(async () => {
+  (async () => {
     const token = await getAccessToken(CONFIG.API.ENDPOINT)
     const { result, total_pages } = await getTrendingCharacters(token!)
     trendingCharacters.value = result
-    recommendedCharacters.value = trendingCharacters.value.slice(0, 4)
   })()
 }
 </script>
@@ -53,7 +57,7 @@ if (isAuthenticated.value) {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Loader2 v-if="!recommendedCharacters" class="animate-spin" />
         <CharacterCard
-          class="shadow-none transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-300"
+          class="shadow-none transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-300 dark:hover:shadow-black"
           v-for="i in recommendedCharacters"
           :key="i.id"
           :data="i"
@@ -69,7 +73,7 @@ if (isAuthenticated.value) {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Loader2 v-if="!trendingCharacters" class="animate-spin" />
         <CharacterCard
-          class="shadow-none transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-300"
+          class="shadow-none transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-300 dark:hover:shadow-black"
           v-for="i in trendingCharacters"
           :key="i.id"
           :data="i"

@@ -175,9 +175,9 @@ const submit = async () => {
           </TabsList>
           <TabsContent value="simple">
             <div class="flex flex-col gap-2">
-              <ScrollArea class="h-72 rounded-md border">
+              <div class="h-72 rounded-md border overflow-y-auto">
                 <ChatContent v-model="dialogueExample" class="m-4" />
-              </ScrollArea>
+              </div>
               <div class="flex w-full items-center gap-1.5">
                 <Select v-model="dialogueChatPerson">
                   <SelectTrigger class="grow-0 w-36">

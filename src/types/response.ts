@@ -55,3 +55,10 @@ export interface ChatHistory {
   logs: ChatLog[]
   time?: number
 }
+
+export interface UserResponse {
+  id: string
+  name: string
+  nickname: string
+  picture: string
+}

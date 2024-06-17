@@ -14,7 +14,7 @@ const deleteLog = (i: number) => {
 <template>
   <div class="space-y-4 border-card">
     <div
-      class="flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm"
+      class="flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm text-wrap whitespace-normal break-words"
       :class="{
         'bg-muted rounded-bl-none': content.role === 'character',
         'ml-auto bg-primary text-primary-foreground rounded-br-none': content.role === 'user'

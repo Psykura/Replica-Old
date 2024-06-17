@@ -32,6 +32,11 @@ const router = createRouter({
       component: () => import('@/views/Chat.vue')
     },
     {
+      path: '/user/:uid',
+      name: 'User',
+      component: () => import('@/views/User.vue')
+    },
+    {
       path: '/auth/callback',
       name: 'AuthCallback',
       component: () => import('@/views/AuthCallback.vue')

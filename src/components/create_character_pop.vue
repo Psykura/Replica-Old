@@ -10,7 +10,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import CreateCharacter from '@/components/create_character.vue'
 import { BookUser } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
 </script>
 
 <template>
@@ -28,9 +27,9 @@ import { ScrollArea } from '@/components/ui/scroll-area'
             <DialogHeader class="pl-6 pr-6 pt-6">
               <DialogTitle>角色信息表</DialogTitle>
             </DialogHeader>
-            <ScrollArea class="max-h-[calc(100vh-6.25rem)] pl-4 pr-4 pb-6">
+            <div class="max-h-[calc(100vh-6.25rem)] pl-4 pr-4 pb-6 overflow-y-auto">
               <CreateCharacter class="ml-2 mr-2" />
-            </ScrollArea>
+            </div>
           </DialogContent>
         </Dialog>
       </div>
