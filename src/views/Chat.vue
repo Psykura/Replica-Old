@@ -7,11 +7,13 @@ import { useLogto } from '@logto/vue'
 import { useChatStore } from '@/stores/chat'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { SendHorizonal } from 'lucide-vue-next'
+import { BookUser, SendHorizonal } from 'lucide-vue-next'
 import { Loader2, ThumbsUp, ThumbsDown, RotateCcw, MessageCircleMore } from 'lucide-vue-next'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { type UserResponse } from '@/types/response'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import CreateCharacter from '@/components/create_character.vue'
 
 const { toast } = useToast()
 const router = useRouter()
@@ -23,6 +25,7 @@ const chatStore = useChatStore()
 const hid = ref('')
 const ready = ref(false)
 const userName = ref<string>()
+const userId = ref<string>()
 
 const inputText = ref('')
 const disableInput = ref(false)
@@ -40,6 +43,7 @@ const load = async () => {
 
   const claims = await getIdTokenClaims()
   userName.value = claims!.username!!
+  userId.value = claims!.sub
   if (route.name === 'NewChat') {
     const cid = (route.params['cid'] as string) || ''
     if (!cid) {
@@ -51,6 +55,7 @@ const load = async () => {
     chatStore.addChat(hid, newChatInfo.cid, newChatInfo.logs)
     if (!chatStore.isCharacterExist(cid)) {
       const char = await getCharacter(token!, cid)
+      char.id = cid
       chatStore.upsertCharacter(cid, char)
     }
     chatStore.appendHistory({
@@ -68,6 +73,7 @@ const load = async () => {
     chatStore.addChat(hid.value, theChat.cid, theChat.logs, theChat.feedbacked ?? false)
     if (!chatStore.isCharacterExist(theChat.cid)) {
       const char = await getCharacter(token!, theChat.cid)
+      char.id = theChat.cid
       chatStore.upsertCharacter(theChat.cid, char)
     }
   }
@@ -181,15 +187,29 @@ const submitEnter = async (e: KeyboardEvent) => {
           <h1 class="text-2xl font-bold">{{ chatStore.getCharacterFromChat(hid).name }}</h1>
         </div>
         <div class="mt-2 text-center text-gray-600">
-          <p class="text-sm">{{ chatStore.getCharacterFromChat(hid).description }}</p>
+          <p class="text-sm mb-2">{{ chatStore.getCharacterFromChat(hid).description }}</p>
           <div class="flex gap-2 justify-center items-center text-sm">
-            <RouterLink :to="{ name: 'User', params: { uid: (chatStore.getCharacterFromChat(hid).creator as UserResponse).id }}">@{{ (chatStore.getCharacterFromChat(hid).creator as UserResponse).nickname || (chatStore.getCharacterFromChat(hid).creator as UserResponse).name }}</RouterLink>
+            <RouterLink :to="{ name: 'User', params: { uid: chatStore.getCharacterFromChat(hid).creator.id }}">@{{ chatStore.getCharacterFromChat(hid).creator.nickname || (chatStore.getCharacterFromChat(hid).creator as UserResponse).name }}</RouterLink>
             <span class="flex items-center">
               <MessageCircleMore class="w-4 h-4" />{{ chatStore.getCharacterFromChat(hid).stat.chat_count }}
             </span>
             <span class="flex items-center">
               <ThumbsUp class="w-4 h-4" />{{ chatStore.getCharacterFromChat(hid).stat.liked }}
             </span>
+
+            <Dialog v-if="chatStore.getCharacterFromChat(hid).creator.id == userId">
+              <DialogTrigger as-child>
+                <Button size="sm" variant="link">编辑</Button>
+              </DialogTrigger>
+              <DialogContent class="p-0">
+                <DialogHeader class="pl-6 pr-6 pt-6">
+                  <DialogTitle>编辑角色信息</DialogTitle>
+                </DialogHeader>
+                <div class="max-h-[calc(100vh-6.25rem)] pl-4 pr-4 pb-6 overflow-y-auto">
+                  <CreateCharacter class="ml-2 mr-2" :preload="chatStore.getCharacterFromChat(hid)" />
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </div>

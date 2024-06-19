@@ -37,9 +37,9 @@ export interface Character {
   name: string
   greeting: string
   description: string
-  information: string
+  key_info: string
   dialogue_example: string
-  creator: string | UserResponse
+  creator: UserResponse
   tags: string[]
   visibility: number
   create_time: number

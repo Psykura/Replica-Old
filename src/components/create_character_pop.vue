@@ -21,7 +21,8 @@ import { Button } from '@/components/ui/button'
       <div class="flex flex-col gap-2">
         <Dialog>
           <DialogTrigger as-child>
-            <Button variant="ghost"><BookUser class="w-4 h-4 mr-2" />创建角色</Button>
+            <Button variant="ghost"><BookUser class="w-4 h-4 mr-2" />
+             创建角色</Button>
           </DialogTrigger>
           <DialogContent class="p-0">
             <DialogHeader class="pl-6 pr-6 pt-6">

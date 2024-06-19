@@ -25,13 +25,18 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertCircle, Send } from 'lucide-vue-next'
 import ChatContent from '@/components/chat_content.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { createCharacter } from '@/utils/api'
+import { createCharacter, updateCharacter } from '@/utils/api'
 import CONFIG from '@/config'
 import { useLogto } from '@logto/vue'
 import { useRouter } from 'vue-router'
+import type { Character } from '@/types/response'
+import { useChatStore } from '@/stores/chat'
 
 const { getAccessToken } = useLogto()
+
+const props = defineProps<{
+  preload?: Character
+}>()
 
 const formSchema = toTypedSchema(
   z.object({
@@ -47,7 +52,7 @@ const formSchema = toTypedSchema(
       .string({ required_error: '必须填写' })
       .min(2, '描述长度不得小于 2')
       .max(50, '描述长度不得大于 50'),
-    information: z
+    key_info: z
       .string({ required_error: '必须填写' })
       .min(2, '信息长度不得小于 2')
       .max(700, '信息长度不得大于 700'),
@@ -70,11 +75,13 @@ const data = ref({
   name: '',
   greeting: '',
   description: '',
-  information: '',
+  key_info: '',
   dialogue_example: '',
   tags: [] as string[],
   visibility: '1' as '1' | '2' | '3'
 })
+
+const chatStore = useChatStore()
 const errorMsg = ref('')
 const dialogueExample = ref<
   {
@@ -139,11 +146,28 @@ const submit = async () => {
     const token = await getAccessToken(CONFIG.API.ENDPOINT)
     const request: Record<string, any> = parseResult.value!!
     request.visibility = parseInt(request.visibility)
+    if (props.preload) {
+      chatStore.clearCharacter(props.preload.id)
+      await updateCharacter(token!, props.preload.id, request)
+      await router.push({ name: 'NewChat', params: { cid: props.preload.id } })
+      return
+    }
     const cid = await createCharacter(token!, request)
     await router.push({ name: 'NewChat', params: { cid } })
   } else {
     errorMsg.value = parseResult.errors.map((e) => e.errors[0]).join('\n')
   }
+}
+
+if (props.preload) {
+  data.value.name = props.preload.name
+  data.value.greeting = props.preload.greeting
+  data.value.description = props.preload.description
+  data.value.key_info = props.preload.key_info
+  data.value.dialogue_example = props.preload.dialogue_example
+  convertExampleToChat()
+  data.value.tags = props.preload.tags
+  data.value.visibility = props.preload.visibility.toString() as '1' | '2' | '3'
 }
 </script>
 
@@ -163,8 +187,8 @@ const submit = async () => {
         <Textarea placeholder="描述" v-model="data.description" />
       </div>
       <div class="flex flex-col gap-2">
-        <label for="information">信息</label>
-        <Textarea class="min-h-32" placeholder="信息" v-model="data.information" />
+        <label for="key_info">信息</label>
+        <Textarea class="min-h-32" placeholder="信息" v-model="data.key_info" />
       </div>
       <div class="flex flex-col gap-2">
         <label for="dialogue_example">对话示例</label>

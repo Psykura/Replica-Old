@@ -19,6 +19,7 @@ onMounted(async () => {
   if (!chatStore.isCharacterExist(props.cid)) {
     const token = await getAccessToken(CONFIG.API.ENDPOINT)
     const char = await getCharacter(token!, props.cid)
+    char.id = props.cid
     chatStore.upsertCharacter(props.cid, char)
   }
 })

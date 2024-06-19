@@ -52,10 +52,10 @@ onMounted(async () => {
       <div class="flex items-center justify-start gap-6 p-14 triangle-bg">
         <Avatar class="w-32 h-32">
           <AvatarImage :src="user.picture" />
-          <AvatarFallback>{{ user.name[0] }}</AvatarFallback>
+          <AvatarFallback>{{ (user.nickname || user.name)[0] }}</AvatarFallback>
         </Avatar>
         <div class="flex flex-col text-white">
-          <h1 class="text-4xl font-bold">{{ user.nickname ?? user.name }}</h1>
+          <h1 class="text-4xl font-bold">{{ user.nickname || user.name }}</h1>
           <span class="text-gray-200 text-sm">@{{ user.id }}</span>
         </div>
       </div>

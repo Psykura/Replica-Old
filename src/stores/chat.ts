@@ -90,6 +90,9 @@ export const useChatStore = defineStore('chat', {
     },
     resetFeedback(hid: string) {
       this.chats[hid].feedback = false
+    },
+    clearCharacter(cid: string) {
+      delete this.characters[cid]
     }
   }
 })
