@@ -8,9 +8,10 @@ import { useChatStore } from '@/stores/chat'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { SendHorizonal } from 'lucide-vue-next'
-import { Loader2, ThumbsUp, ThumbsDown, RotateCcw } from 'lucide-vue-next'
+import { Loader2, ThumbsUp, ThumbsDown, RotateCcw, MessageCircleMore } from 'lucide-vue-next'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { type UserResponse } from '@/types/response'
 
 const { toast } = useToast()
 const router = useRouter()
@@ -171,6 +172,28 @@ const submitEnter = async (e: KeyboardEvent) => {
   <div class="flex flex-col h-screen justify-between" v-if="ready">
     <div class="flex flex-col gap-3 overflow-y-auto p-4" ref="scroll">
       <!-- Chat history -->
+      <div class="flex flex-col items-center m-10">
+        <div class="flex gap-3 items-center">
+          <Avatar>
+            <AvatarImage src="file://" />
+            <AvatarFallback>{{ chatStore.getCharacterFromChat(hid).name[0] }}</AvatarFallback>
+          </Avatar>
+          <h1 class="text-2xl font-bold">{{ chatStore.getCharacterFromChat(hid).name }}</h1>
+        </div>
+        <div class="mt-2 text-center text-gray-600">
+          <p class="text-sm">{{ chatStore.getCharacterFromChat(hid).description }}</p>
+          <div class="flex gap-2 justify-center items-center text-sm">
+            <RouterLink :to="{ name: 'User', params: { uid: (chatStore.getCharacterFromChat(hid).creator as UserResponse).id }}">@{{ (chatStore.getCharacterFromChat(hid).creator as UserResponse).nickname || (chatStore.getCharacterFromChat(hid).creator as UserResponse).name }}</RouterLink>
+            <span class="flex items-center">
+              <MessageCircleMore class="w-4 h-4" />{{ chatStore.getCharacterFromChat(hid).stat.chat_count }}
+            </span>
+            <span class="flex items-center">
+              <ThumbsUp class="w-4 h-4" />{{ chatStore.getCharacterFromChat(hid).stat.liked }}
+            </span>
+          </div>
+        </div>
+      </div>
+
 
       <template v-for="(log, i) in chatStore.getLogs(hid)" :key="i">
         <div class="flex gap-3 justify-end" v-if="log.from === 0">

@@ -17,7 +17,7 @@ defineProps<{
     :to="{ name: 'NewChat', params: { cid: data.id } }"
     class="rounded-lg border bg-card text-card-foreground shadow-sm select-none cursor-pointer"
   >
-    <CardHeader class="flex flex-row pb-3">
+    <CardHeader class="flex flex-row pb-3 items-center">
       <Avatar>
         <AvatarImage src="files://" />
         <AvatarFallback>{{ data.name[0] }}</AvatarFallback>

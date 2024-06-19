@@ -39,7 +39,7 @@ export interface Character {
   description: string
   information: string
   dialogue_example: string
-  creator: string
+  creator: string | UserResponse
   tags: string[]
   visibility: number
   create_time: number

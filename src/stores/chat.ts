@@ -38,6 +38,10 @@ export const useChatStore = defineStore('chat', {
     },
     getHistory: (state) => {
       return state.history
+    },
+    getChatCharacterId: (state) => (hid: string) => {
+      console.log(hid)
+      return state.chats[hid].cid
     }
   },
   actions: {
