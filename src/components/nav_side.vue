@@ -115,9 +115,6 @@ onMounted(async () => {
           </DialogContent>
         </Dialog>
       </div>
-      <footer class="text-center text-sm">
-        &copy;Replica by <a href="https://psykura.one" target="_blank">Psykura Lab</a>
-      </footer>
     </nav>
   </aside>
 </template>

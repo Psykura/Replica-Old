@@ -2,6 +2,7 @@
 import { RouterView, useRoute } from 'vue-router'
 import NavSide from '@/components/nav_side.vue'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Separator } from '@/components/ui/separator'
 
 const route = useRoute()
 
@@ -24,6 +25,10 @@ if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.match
     <NavSide />
     <ScrollArea class="flex-1 h-full">
       <RouterView />
+      <footer class="text-center text-sm mt-5">
+        <p class="font-bold">&copy;Replica by <a href="https://psykura.one" target="_blank">Psykura Lab</a></p>
+        <p>目前有的问题请来QQ群聊：961342365</p>
+      </footer>
     </ScrollArea>
   </div>
 </template>
