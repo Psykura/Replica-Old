@@ -55,8 +55,24 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from) => {
+  let needAuth = false
+
   const authed = await logtoCli.isAuthenticated()
-  if (!authed && to.name !== 'RequireLogin' && to.name !== 'AuthCallback') {
+  if (to.name !== 'RequireLogin' && to.name !== 'AuthCallback') {
+    // not going to login page
+    if (authed) {
+      // already authenticated
+      if (await logtoCli.getAccessToken(CONFIG.API.ENDPOINT) === undefined) {
+        // token expired
+        needAuth = true
+      }
+    } else {
+      // not authenticated
+      needAuth = true
+    }
+  }
+
+  if (needAuth) {
     const query: Record<string, string> = {}
     if (to.name !== 'Landing') {
       query['return'] = encodeURIComponent(to.fullPath)
