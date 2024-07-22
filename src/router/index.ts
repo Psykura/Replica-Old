@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LogtoClient from '@logto/browser'
 import CONFIG from '@/config'
-import { useLogto } from '@logto/vue'
-const { getAccessToken } = useLogto()
 
 const logtoCli = new LogtoClient({
   endpoint: CONFIG.LOGTO.ENDPOINT,
@@ -64,7 +62,7 @@ router.beforeEach(async (to, from) => {
     // not going to login page
     if (authed) {
       // already authenticated
-      if (getAccessToken(CONFIG.API.ENDPOINT) === undefined) {
+      if (await logtoCli.getAccessToken(CONFIG.API.ENDPOINT) === undefined) {
         // token expired
         needAuth = true
       }
