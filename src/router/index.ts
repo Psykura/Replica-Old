@@ -62,8 +62,13 @@ router.beforeEach(async (to, from) => {
     // not going to login page
     if (authed) {
       // already authenticated
-      if (await logtoCli.getAccessToken(CONFIG.API.ENDPOINT) === undefined) {
-        // token expired
+      try {
+        if (await logtoCli.getAccessToken(CONFIG.API.ENDPOINT) === undefined) {
+          // token expired
+          needAuth = true
+        }
+      } catch (e) {
+        // failed to get token
         needAuth = true
       }
     } else {
